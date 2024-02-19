@@ -1,0 +1,4 @@
+Searching for 1-Wire devices...
+Found device 0 with address: 28 FF 26 61 51 17 04 00
+Found device 1 with address: 28 FF CB A8 50 17 04 37
+Found 2 1-Wire devices
