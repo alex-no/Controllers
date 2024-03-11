@@ -49,8 +49,8 @@ const int useSettingDelay = 10000;       // Switch to sett0ng mode
 const int sensorActiveDelay = 7000;      // Stram is not active
 const int emptyPressureDelay = 10000;    // Pressure is empty
 
-const char* ssid =  "my home";           // Имя вайфай точки доступа
-const char* password =  "MyHomeWiFi7";   // Пароль от точки доступа
+const char* ssid =  "";           // Имя вайфай точки доступа
+const char* password =  "";   // Пароль от точки доступа
 const char* mqtt_server = "192.168.8.1"; // Имя сервера MQTT
 const int mqtt_port = 1883;              // Порт для подключения к серверу MQTT
 //const char *mqtt_user = ""; // Логин от сервера
