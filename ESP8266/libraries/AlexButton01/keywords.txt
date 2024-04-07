@@ -1,0 +1,24 @@
+#######################################
+# Syntax Coloring Map For AlexButton01
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+AlexButton01		KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+check			KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+normal_status LITERAL1
+bounce_contacts_delay LITERAL1
+double_press_time LITERAL1
+long_press_time LITERAL1

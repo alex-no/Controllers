@@ -1,0 +1,46 @@
+//SPI SLAVE (ARDUINO)
+//SPI COMMUNICATION BETWEEN TWO ARDUINO 
+//CIRCUIT DIGEST
+#include<SPI.h>
+volatile byte Slavereceived;
+void setup()
+{
+  Serial.begin(9600);
+  
+  SPCR |= _BV(SPE);                       //Turn on SPI in Slave Mode
+  received = false;
+  
+  pinMode(SS, INPUT); // Назначить SS как вход, это будет сигнализировать, что устройство находится в режиме слейва
+  pinMode(MOSI, INPUT); // Назначить MOSI как вход
+  pinMode(SCK, INPUT); // Назначить SCK как вход
+  
+  SPI.begin();
+  SPI.attachInterrupt();                  //Interuupt ON is set for SPI commnucation
+  
+}
+ISR (SPI_STC_vect)                        //Inerrrput routine function 
+{
+  Slavereceived = SPDR;                   // Value received from master if store in variable slavereceived
+  received = true;                        //Sets received as True 
+}
+
+void loop()
+{
+  if (received) {                         //Logic to SET LED ON OR OFF depending upon the value recerived from master
+    Serial.println("Slave received");
+    Serial.println(Slavereceived);
+    SPDR = '';
+    received = false;
+    delay(1000);
+  }
+}
+
+void receiveTemperature() {
+  // Прочитать байт данных из MOSI (Master Out Slave In)
+  byte receivedByte = SPI.transfer(0); // Можно передать любое значение, так как мы просто хотим прочитать данные
+  
+  // Делайте что-то с прочитанным байтом данных
+  // Например, выводим его на последовательный порт
+  Serial.print("Принятый байт: ");
+  Serial.println(receivedByte);
+}

@@ -1,0 +1,40 @@
+#include <ESP8266WiFi.h> 
+#include <OneWire.h>
+#include <DallasTemperature.h>
+
+#define ONE_WIRE_BUS 5 //D1
+OneWire oneWire(ONE_WIRE_BUS);//создаем объект для работы с библиотекой OneWire
+DallasTemperature DS18B20 (&oneWire);//создаем объект для работы с библиотекой DallasTemperature
+
+char temperatureC[6];
+WiFiServer server (80);// Номер порта для сервера
+
+void getTemperature(){
+  float tempC;
+  do{
+    DS18B20.requestTemperatures();
+    tempC = DS18B20.getTempCByIndex(0);
+    dtostrf(tempC, 2, 2, temperatureC);
+    delay(100);
+  } while (tempC == 85.0 || tempC == (-127.0));// код 85 - ошибка чтения, -127 - отсутствует датчик
+}
+
+void setup()
+{
+  Serial.begin(9600);
+  delay(10);
+  pinMode(ONE_WIRE_BUS, INPUT);     // Initialize the ONE_WIRE_BUS pin as an input
+  DS18B20.begin(); //начинаем работу с датчиком
+  DS18B20.setResolution(12); //устанавливаем расширение датчика (от 9 до 12)
+  Serial.println();
+  Serial.print("Start!!");  
+  Serial.println();
+}
+
+void loop()
+{
+  getTemperature();// читаем температуру
+  Serial.print("Temperature = ");
+  Serial.println(temperatureC);
+  delay(300);
+}

@@ -1,0 +1,45 @@
+//SLAVE
+#define MOSI_PIN 11 
+#define MISO_PIN 12 
+#define SCK_PIN  13
+#define SS_PIN 10
+
+void setup() {
+	SPCR = B00000000;
+	SPCR = (1 << SPE);
+	Serial.begin(9600);
+	pinMode(MOSI_PIN, INPUT);
+	pinMode(MISO_PIN, OUTPUT);
+	pinMode(SCK_PIN, INPUT);
+	pinMode(SS_PIN, INPUT);
+}
+
+byte spi_receive()
+{
+	while (!(SPSR & (1 << SPIF))) {} ;
+	return SPDR;
+}
+
+String recivStr()
+{	
+	String str = "";
+	byte recievedByte;
+	int i = 0;
+	while (i == 0) {
+		while (digitalRead(SS_PIN) == LOW) 
+		{
+			recievedByte = spi_receive();
+			str += (char)recievedByte;
+			i++;
+			delay(10);
+		}
+	} 
+	return str;
+}
+
+
+
+void loop() {	
+	Serial.println(recivStr());
+}
+
