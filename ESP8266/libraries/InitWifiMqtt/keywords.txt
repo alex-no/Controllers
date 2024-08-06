@@ -1,0 +1,23 @@
+#######################################
+# Syntax Coloring Map For InitWifiMqtt
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+InitWifiMqtt		KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+init			KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+normal_status LITERAL1
+wifi_ip LITERAL1
+wifi_name LITERAL1
