@@ -150,8 +150,7 @@ void setup()
     for (int i = 0; i < 5 && !connectWifi(); i++) {
       delay(1000);
     }
-    //mqttClient.setServer(mqtt_server, mqtt_port);
-    mqttClient.setServer(mqtt_server, 1883);
+    mqttClient.setServer(mqtt_server, mqtt_port);
     mqttClient.setCallback(receiveMqtt);
   }
 }
@@ -196,7 +195,7 @@ void checkWiFiCredentials()
   if (button.state()) {
     setWiFiCredentials();
   } else {
-    getWiFiCredentials()
+    getWiFiCredentials();
   }
   
   if (ssid.length() == 0) {
@@ -223,8 +222,8 @@ void getWiFiCredentials()
 }
 void setWiFiCredentials()
 {
-  writeString(ssid0, 0);
-  writeString(password0, 16);
+  writeString(ssid, 0);
+  writeString(password, 16);
 }
 
 void setDefaultValues()
