@@ -39,12 +39,17 @@ String InitWifiMqtt::generateNewPassword()
 {
   static String psw;
 
+  pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, LOW);
   Serial.println("Enter new WiFi password");
   psw = readSerialString();
   digitalWrite(LED_BUILTIN, HIGH);
 
   saveStringEEPROM(psw);
+  Serial.println("new WiFi password saved");
+  for (int i = 0; i < 5; i++) {
+    Serial.println();
+  }
 
   return psw;
 };
@@ -103,15 +108,18 @@ String InitWifiMqtt::readSerialString()
     if (Serial.available() > 0) {
       char inChar = (char)Serial.read();
       if (inChar == '\n') {
-        break;
+        Serial.println("Stop by press Enter");
+        return buffer;
       }
       buffer += inChar;
       if (buffer.length() >= 19) {
-        break;
+        Serial.println("Stop by length password");
+        return buffer;
       }
     }
   }
 
+  Serial.println("Stop by timeout");
   return buffer;
 };
 
