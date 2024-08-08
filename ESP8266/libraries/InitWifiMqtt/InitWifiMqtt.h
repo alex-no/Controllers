@@ -14,8 +14,10 @@ class InitWifiMqtt
 
     int init(); // Check button status and reyturn its value
     
+    int startDelay = 500;        // Delay for all elements to become operational. 
     int checkResetDelay = 350;
     int checkSerialDelay = 5000;
+    int readSerialDelay = 10000;
     int serialSpeed = 9600;
 
     int eepromAddrPassword = 0;
@@ -34,7 +36,8 @@ class InitWifiMqtt
   protected:
     boolean checkResetPassword(); // State of button - is reset WiFi Password
     String generateNewPassword();
-    boolean initSerial();    // Init Serial conection
+    boolean initSerial();         // Init Serial conection
+    String readSerialString();
     String readStringEEPROM();
     void saveStringEEPROM(String const& psw);
 

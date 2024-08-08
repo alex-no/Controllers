@@ -38,7 +38,12 @@ boolean InitWifiMqtt::checkResetPassword()
 String InitWifiMqtt::generateNewPassword()
 {
   static String psw;
-  psw = "la-la-la";
+
+  digitalWrite(LED_BUILTIN, LOW);
+  Serial.println("Enter new WiFi password");
+  psw = readSerialString();
+  digitalWrite(LED_BUILTIN, HIGH);
+
   saveStringEEPROM(psw);
 
   return psw;
@@ -62,6 +67,8 @@ boolean InitWifiMqtt::initSerial()
  */
 int InitWifiMqtt::init()
 {
+  delay(startDelay);
+
   EEPROM.begin(8);
   boolean isSerial = initSerial();
 
@@ -82,6 +89,30 @@ int InitWifiMqtt::init()
 
   //Serial.println("Connected to the WiFi network");
 
+};
+
+/**
+ * Read String from Serial
+ */
+String InitWifiMqtt::readSerialString()
+{
+  static String buffer;
+  unsigned long checkTime = millis() + readSerialDelay;
+
+  while (millis() < checkTime) {
+    if (Serial.available() > 0) {
+      char inChar = (char)Serial.read();
+      if (inChar == '\n') {
+        break;
+      }
+      buffer += inChar;
+      if (buffer.length() >= 19) {
+        break;
+      }
+    }
+  }
+
+  return buffer;
 };
 
 /**
@@ -108,11 +139,12 @@ String InitWifiMqtt::readStringEEPROM()
 void InitWifiMqtt::saveStringEEPROM(String const& psw)
 {
   if (psw.length() >= 20) {
-
+    Serial.println("Error: Password too long");
+  } else {
+    for (int i = 0; i < psw.length(); i++) {
+      EEPROM.write(eepromAddrPassword + i, psw[i]);
+    }
+    EEPROM.write(eepromAddrPassword + psw.length(), '\0');
+    EEPROM.commit();
   }
-  for (int i = 0; i < psw.length(); i++) {
-    EEPROM.write(eepromAddrPassword + i, psw[i]);
-  }
-  EEPROM.write(eepromAddrPassword + psw.length(), '\0');
-  EEPROM.commit();
 };
