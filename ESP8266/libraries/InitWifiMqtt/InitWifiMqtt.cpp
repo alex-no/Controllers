@@ -89,7 +89,7 @@ int InitWifiMqtt::init()
  */
 String InitWifiMqtt::readStringEEPROM()
 {
-  String buffer;
+  static String buffer;
 
   for (int i = 0; i < 20; i++) {
     byte c = EEPROM.read(eepromAddrPassword + i);
@@ -107,9 +107,12 @@ String InitWifiMqtt::readStringEEPROM()
  */
 void InitWifiMqtt::saveStringEEPROM(String const& psw)
 {
-    for (int i = 0; i < psw.length(); i++) {
-      EEPROM.write(eepromAddrPassword + i, psw[i]);
-    }
-    EEPROM.write(eepromAddrPassword + psw.length(), '\0');
-    EEPROM.commit();
+  if (psw.length() >= 20) {
+
+  }
+  for (int i = 0; i < psw.length(); i++) {
+    EEPROM.write(eepromAddrPassword + i, psw[i]);
+  }
+  EEPROM.write(eepromAddrPassword + psw.length(), '\0');
+  EEPROM.commit();
 };
