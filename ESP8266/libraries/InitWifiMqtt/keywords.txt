@@ -18,6 +18,14 @@ init			KEYWORD2
 # Constants (LITERAL1)
 #######################################
 
-normal_status LITERAL1
-wifi_ip LITERAL1
-wifi_name LITERAL1
+checkSerialDelay LITERAL1
+serialSpeed LITERAL1
+eepromAddrPassword LITERAL1
+normalStatus LITERAL1
+wifiIp LITERAL1
+wifiName LITERAL1
+wifiPassword LITERAL1
+mqttServer LITERAL1
+mqttPort LITERAL1
+mqttUser LITERAL1
+mqttPassword LITERAL1

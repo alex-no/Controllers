@@ -1,5 +1,5 @@
 /*
- * InitWifiMqtt - Read and return all differenn satatus of button (real or sensor)
+ * InitWifiMqtt - Init WiFi, set WiFi password, Init Mqtt
  */
 
 #ifndef INIT_WIFI_MQTT_H_
@@ -10,19 +10,36 @@
 class InitWifiMqtt
 {
   public:
-    InitWifiMqtt(unsigned int pin_button); // Constructor (pin_button)
+    InitWifiMqtt(unsigned int pinButton); // Constructor (pin_button)
 
-    boolean resetWifi(); // State of button - is reset WiFi
     int init(); // Check button status and reyturn its value
     
-    //bool normal_status = LOW;     // Status of pin if button is not pressed
-    bool normal_status   = false; // Status of pin if button is not pressed
-    str wifi_ip = '192.168.1.1';  // Address of WiFi router
-    str wifi_name = 'my_Name';    // Time when button pressed double
+    int checkResetDelay = 350;
+    int checkSerialDelay = 5000;
+    int serialSpeed = 9600;
+
+    int eepromAddrPassword = 0;
+
+    //bool normalStatus = LOW;     // Status of pin if button is not pressed
+    bool normalStatus   = false; // Status of pin if button is not pressed
+    const String wifiIp = "192.168.8.1";  // Address of WiFi router
+    const String wifiName = "my home";    // Time when button pressed double
+    String wifiPassword;
+
+    const String mqttServer = "192.168.8.1";
+    int mqttPort = 1883;
+    const String mqttUser = "";
+    const String mqttPassword = "";
 
   protected:
-    int m_pin_button;                // Counter - how many times button was pressed with shot time interwal
-//    unsigned long m_previous_time;   // Time when button was pressed previous time
+    boolean checkResetPassword(); // State of button - is reset WiFi Password
+    String generateNewPassword();
+    boolean initSerial();    // Init Serial conection
+    String readStringEEPROM();
+    void saveStringEEPROM(String const& psw);
+
+    int m_pinButton;                // Counter - how many times button was pressed with shot time interwal
+//    unsigned long m_previousTime;   // Time when button was pressed previous time
 //    bool m_status;                   // Button status (pressed = true. released = false)
 };
 #endif //INIT_WIFI_MQTT_H_

@@ -1,31 +1,115 @@
 /*
- * InitWifiMqtt Arduino
+ * InitWifiMqtt Arduino/ESP8266WiFi
  * Version 1.01
  */
 
 #include <InitWifiMqtt.h>
+#include <EEPROM.h>
+//#include <ESP8266WiFi.h>
+//#include <SPI.h>
+//#include <Ethernet.h>
+//#include <PubSubClient.h>
 
-InitWifiMqtt::InitWifiMqtt(unsigned int pin_button)
-  : m_pin_button(pin_button)
-//  , m_previous_time(millis())
-//  , m_previous_status(false)
+InitWifiMqtt::InitWifiMqtt(unsigned int pinButton)
+  : m_pinButton(pinButton)
+//  , m_previousTime(millis())
+//  , m_previousStatus(false)
 {
+  //WiFiClient espClient;
+  //PubSubClient client(espClient);
 };
 
 /**
- * Button resetWifi:
+ * Button resetPassword:
  *  false - button is not pressed - do nothing
  *  true - button is pressed - reset Wifi password
  */
-boolean InitWifiMqtt::resetWifi()
+boolean InitWifiMqtt::checkResetPassword()
 {
-  return digitalRead(m_pin_button) != normal_status;
+  unsigned long checkTime = millis() + checkResetDelay;
+  do {
+    if (digitalRead(m_pinButton) == normalStatus) {
+      return false;
+    }
+  } while (millis() < checkTime);
+  return true;
+};
+
+String InitWifiMqtt::generateNewPassword()
+{
+  static String psw;
+  psw = "la-la-la";
+  saveStringEEPROM(psw);
+
+  return psw;
+};
+
+boolean InitWifiMqtt::initSerial()
+{
+  Serial.begin(9600);
+
+  unsigned long checkTime = millis() + checkSerialDelay;
+  do {
+    if (Serial) {
+      Serial.println("");
+      return true;
+    }
+  } while (millis() < checkTime);
+  return false;
 };
 
 /**
  */
 int InitWifiMqtt::init()
 {
-  int result = 0;
-  return result;
+  EEPROM.begin(8);
+  boolean isSerial = initSerial();
+
+  if (checkResetPassword()) {
+    wifiPassword.clear();
+  } else {
+    wifiPassword = readStringEEPROM();
+  }
+
+  if (wifiPassword.length() == 0 && isSerial) {
+    Serial.println("Arduino is connected!");
+    wifiPassword = generateNewPassword();
+  }
+
+  Serial.println("WiFi password: ");
+  Serial.println(wifiPassword.c_str());
+
+
+  //Serial.println("Connected to the WiFi network");
+
+};
+
+/**
+ * Read String from EEPROM
+ */
+String InitWifiMqtt::readStringEEPROM()
+{
+  String buffer;
+
+  for (int i = 0; i < 20; i++) {
+    byte c = EEPROM.read(eepromAddrPassword + i);
+    if (c == '\0' || c == 255) {
+        break;
+    }
+    buffer += char(c);
+  }
+
+  return buffer;
+};
+
+/**
+ * Save String to EEPROM
+ */
+void InitWifiMqtt::saveStringEEPROM(String const& psw)
+{
+    for (int i = 0; i < psw.length(); i++) {
+      EEPROM.write(eepromAddrPassword + i, psw[i]);
+    }
+    EEPROM.write(eepromAddrPassword + psw.length(), '\0');
+    EEPROM.commit();
 };
