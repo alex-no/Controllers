@@ -18,6 +18,7 @@ init			KEYWORD2
 # Constants (LITERAL1)
 #######################################
 
+eepromSize LITERAL1
 checkSerialDelay LITERAL1
 serialSpeed LITERAL1
 eepromAddrPassword LITERAL1

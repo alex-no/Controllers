@@ -14,6 +14,8 @@ class InitWifiMqtt
 
     int init(); // Check button status and reyturn its value
     
+    int eepromSize = 64;
+
     int startDelay = 500;        // Delay for all elements to become operational. 
     int checkResetDelay = 350;
     int checkSerialDelay = 5000;

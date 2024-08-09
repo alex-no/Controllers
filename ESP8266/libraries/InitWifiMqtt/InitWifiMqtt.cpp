@@ -74,7 +74,7 @@ int InitWifiMqtt::init()
 {
   delay(startDelay);
 
-  EEPROM.begin(8);
+  EEPROM.begin(eepromSize);
   boolean isSerial = initSerial();
 
   if (checkResetPassword()) {
