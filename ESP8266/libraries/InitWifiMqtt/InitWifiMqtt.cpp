@@ -37,7 +37,7 @@ boolean InitWifiMqtt::checkResetPassword()
 
 String InitWifiMqtt::generateNewPassword()
 {
-  static String psw;
+  String psw;
 
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, LOW);
@@ -68,9 +68,9 @@ boolean InitWifiMqtt::initSerial()
   return false;
 };
 
-String InitWifiMqtt::connecWiFi()
+IPAddress InitWifiMqtt::connecWiFi()
 {
-  static String ipAdr;
+  IPAddress ipAdr;
 
   Serial.println("Start WiFi connection.");
   WiFi.begin(wifiName, wifiPassword.c_str());
@@ -79,8 +79,7 @@ String InitWifiMqtt::connecWiFi()
     Serial.print(".");
   }
   Serial.println();
-  Serial.println(WiFi.localIP());
-  //ipAdr = WiFi.localIP();
+  ipAdr = WiFi.localIP();
 
   return ipAdr;
 };
@@ -119,7 +118,7 @@ int InitWifiMqtt::init()
 
   wifiIp = connecWiFi();
   Serial.println("Connected to the WiFi network");
-  Serial.println(wifiIp.c_str());
+  Serial.println(wifiIp);
 
 };
 
@@ -128,7 +127,7 @@ int InitWifiMqtt::init()
  */
 String InitWifiMqtt::readSerialString()
 {
-  static String buffer;
+  String buffer;
   unsigned long checkTime = millis() + readSerialDelay;
 
   while (millis() < checkTime) {
@@ -155,7 +154,7 @@ String InitWifiMqtt::readSerialString()
  */
 String InitWifiMqtt::readStringEEPROM()
 {
-  static String buffer;
+  String buffer;
 
   for (int i = 0; i < 20; i++) {
     byte c = EEPROM.read(eepromAddrPassword + i);
