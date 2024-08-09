@@ -1,6 +1,6 @@
 #include <InitWifiMqtt.h>
 
-const int pinSensor  = 13; // D8 Main Pin for control of Pump
+const int pinSensor  = 13; // D7 Main Pin for control of Pump
 
 InitWifiMqtt mqtt(pinSensor);
 

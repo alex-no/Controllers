@@ -5,7 +5,7 @@
 
 #include <InitWifiMqtt.h>
 #include <EEPROM.h>
-//#include <ESP8266WiFi.h>
+#include <ESP8266WiFi.h>
 //#include <SPI.h>
 //#include <Ethernet.h>
 //#include <PubSubClient.h>
@@ -68,6 +68,23 @@ boolean InitWifiMqtt::initSerial()
   return false;
 };
 
+String InitWifiMqtt::connecWiFi()
+{
+  static String ipAdr;
+
+  Serial.println("Start WiFi connection.");
+  WiFi.begin(wifiName, wifiPassword.c_str());
+  for (int i = 0; WiFi.status() != WL_CONNECTED && i < 30; i++) {
+    delay(200);
+    Serial.print(".");
+  }
+  Serial.println();
+  Serial.println(WiFi.localIP());
+  //ipAdr = WiFi.localIP();
+
+  return ipAdr;
+};
+
 /**
  */
 int InitWifiMqtt::init()
@@ -83,16 +100,26 @@ int InitWifiMqtt::init()
     wifiPassword = readStringEEPROM();
   }
 
-  if (wifiPassword.length() == 0 && isSerial) {
-    Serial.println("Arduino is connected!");
-    wifiPassword = generateNewPassword();
+  if (isSerial) {
+    if (wifiPassword.length() == 0) {
+      wifiPassword = generateNewPassword();
+      Serial.println("WiFi password: ");
+      Serial.println(wifiPassword.c_str());
+    } else {
+      Serial.println("WiFi password is entered:");
+      for (int i = 0; i < wifiPassword.length(); i++) {
+        Serial.print("*");
+      }
+      Serial.println();
+    }
+    if (wifiPassword.length() == 0) {
+      Serial.println("WiFi password is not entered.");
+    }
   }
 
-  Serial.println("WiFi password: ");
-  Serial.println(wifiPassword.c_str());
-
-
-  //Serial.println("Connected to the WiFi network");
+  wifiIp = connecWiFi();
+  Serial.println("Connected to the WiFi network");
+  Serial.println(wifiIp.c_str());
 
 };
 
@@ -113,7 +140,7 @@ String InitWifiMqtt::readSerialString()
       }
       buffer += inChar;
       if (buffer.length() >= 19) {
-        Serial.println("Stop by length password");
+        Serial.println("Stop by length of password");
         return buffer;
       }
     }

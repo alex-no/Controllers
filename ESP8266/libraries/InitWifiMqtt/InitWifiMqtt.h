@@ -24,10 +24,11 @@ class InitWifiMqtt
 
     int eepromAddrPassword = 0;
 
-    //bool normalStatus = LOW;     // Status of pin if button is not pressed
-    bool normalStatus   = false; // Status of pin if button is not pressed
-    const String wifiIp = "192.168.8.1";  // Address of WiFi router
-    const String wifiName = "my home";    // Time when button pressed double
+    //bool normalStatus = LOW;         // Status of pin if button is not pressed
+    bool normalStatus   = false;       // Status of pin if button is not pressed
+    //const String wifiServerIp = "192.168.8.1";  // Address of WiFi router
+    String wifiIp;               // Address of WiFi connection
+    const String wifiName = "my home"; // Time when button pressed double
     String wifiPassword;
 
     const String mqttServer = "192.168.8.1";
@@ -42,6 +43,7 @@ class InitWifiMqtt
     String readSerialString();
     String readStringEEPROM();
     void saveStringEEPROM(String const& psw);
+    String connecWiFi();
 
     int m_pinButton;                // Counter - how many times button was pressed with shot time interwal
 //    unsigned long m_previousTime;   // Time when button was pressed previous time
