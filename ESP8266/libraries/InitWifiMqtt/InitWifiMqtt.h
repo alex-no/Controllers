@@ -31,7 +31,8 @@ class InitWifiMqtt
     const String wifiName = "my home"; // Time when button pressed double
     String wifiPassword;
 
-    const String mqttServer = "192.168.8.1";
+    //const String mqttServer = "192.168.8.1";
+    const mqttServer ip(192, 168, 8, 1);
     int mqttPort = 1883;
     const String mqttUser = "";
     const String mqttPassword = "";
